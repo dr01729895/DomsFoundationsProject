@@ -35,6 +35,11 @@ bool DFA::eval(vector<Char> list){
     //Check if Accepted exists
     if(Accepting.size() == 0){ return false; }
 
+    //Check DFA accepts all
+    if(Accepting.size() == 1 && Accepting.at(0).getChar() == Start.getChar() && Alpha.size() == 0){
+        return true;
+    }
+
     //Check if empty string is in Accepted
     if(list.size() == 0 || (list.size() == 1 && list.at(0).getChar() == 'e')){
         for(int i=0;i<Accepting.size();i++){
@@ -96,5 +101,9 @@ DFA onlyChar(Char c){
     //Really proud how simple this one is, even though the rest of my code is too complex
 }
 
+//Will return if the DFA returns true or false for the list
+bool test_dfa(DFA d, vector<Char> list){
+    return d.eval(list);
+}
 
 #endif
