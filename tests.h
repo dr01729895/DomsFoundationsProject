@@ -198,7 +198,7 @@ void TEST_everything(DFA d){
     }
 }
 
-void Do_TESTS(void){
+void DO_TESTS1(void){
 
     DFA dfa_no_strings(
         {'e'},  //Alphabet
@@ -313,6 +313,253 @@ void Do_TESTS(void){
     );
 
     TEST_everything(dfa_everything);
+}
+
+void union_test(DFA d){
+
+    vector<Char> list = {'0', '1'};
+
+    for(int i=0;i<12;i++){
+        cout << setw(3) << i+1 << " : " << d.eval(list) << " : ";
+        printListChar(list);
+        list = nextWord({'0','1'}, list);
+    }
+
+    cout << endl;
+}
+
+void DO_TESTS2(void){
+
+    DFA dfa_even_length_binary(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'A'},       //Accepting
+        { {'B', 'A'}, {'B', 'A'} }  //Delta
+    );
+
+    DFA dfa_odd_length_binary(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'B'},       //Accepting
+        { {'B', 'A'}, {'B', 'A'} }  //Delta
+    );
+
+    DFA dfa_even_binary_number(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'A'},       //Accepting
+        { {'A', 'A'}, {'B', 'B'} }  //Delta
+    );
+
+    DFA dfa_odd_binary_number(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'B'},       //Accepting
+        { {'A', 'A'}, {'B', 'B'} }  //Delta
+    );
+    
+    DFA d1 = unioned(dfa_even_binary_number, dfa_even_binary_number);
+    DFA d2 = unioned(dfa_even_length_binary, dfa_even_binary_number);
+    DFA d3 = unioned(dfa_even_binary_number, dfa_even_length_binary);
+    DFA d4 = unioned(dfa_even_length_binary, dfa_even_length_binary);
+
+    DFA d5 = unioned(dfa_odd_binary_number, dfa_odd_binary_number);
+    DFA d6 = unioned(dfa_odd_binary_number, dfa_odd_length_binary);
+    DFA d7 = unioned(dfa_odd_length_binary, dfa_odd_binary_number);
+    DFA d8 = unioned(dfa_odd_length_binary, dfa_odd_length_binary);
+
+    DFA d9 = unioned(dfa_even_binary_number, dfa_odd_binary_number);
+    DFA d10 = unioned(dfa_even_length_binary, dfa_odd_binary_number);
+    DFA d11 = unioned(dfa_even_binary_number, dfa_odd_length_binary);
+    DFA d12 = unioned(dfa_even_length_binary, dfa_odd_length_binary);
+
+    DFA d13 = unioned(dfa_even_binary_number, dfa_odd_binary_number);
+    DFA d14 = unioned(dfa_even_length_binary, dfa_odd_binary_number);
+    DFA d15 = unioned(dfa_even_binary_number, dfa_odd_length_binary);
+    DFA d16 = unioned(dfa_even_length_binary, dfa_odd_length_binary);
+
+
+    union_test(d1);
+    union_test(d2);
+    union_test(d3);
+    union_test(d4);
+    union_test(d5);
+    union_test(d6);
+    union_test(d7);
+    union_test(d8);
+    union_test(d9);
+    union_test(d10);
+    union_test(d11);
+    union_test(d12);
+    union_test(d13);
+    union_test(d14);
+    union_test(d15);
+    union_test(d16);
+
+}
+
+void intersect_test(DFA d){
+
+    vector<Char> list = {'0', '1'};
+
+    for(int i=0;i<12;i++){
+        cout << setw(3) << i+1 << " : " << d.eval(list) << " : ";
+        printListChar(list);
+        list = nextWord({'0','1'}, list);
+    }
+
+    cout << endl;
+}
+
+void DO_TESTS3(void){
+
+    DFA dfa_even_length_binary(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'A'},       //Accepting
+        { {'B', 'A'}, {'B', 'A'} }  //Delta
+    );
+
+    DFA dfa_odd_length_binary(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'B'},       //Accepting
+        { {'B', 'A'}, {'B', 'A'} }  //Delta
+    );
+
+    DFA dfa_even_binary_number(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'A'},       //Accepting
+        { {'A', 'A'}, {'B', 'B'} }  //Delta
+    );
+
+    DFA dfa_odd_binary_number(
+        {'0', '1'},  //Alphabet
+        {'A', 'B'},  //Nodes
+        'A',         //Start
+        {'B'},       //Accepting
+        { {'A', 'A'}, {'B', 'B'} }  //Delta
+    );
+    
+    DFA d1 = intersected(dfa_even_binary_number, dfa_even_binary_number);
+    DFA d2 = intersected(dfa_even_length_binary, dfa_even_binary_number);
+    DFA d3 = intersected(dfa_even_binary_number, dfa_even_length_binary);
+    DFA d4 = intersected(dfa_even_length_binary, dfa_even_length_binary);
+
+    DFA d5 = intersected(dfa_odd_binary_number, dfa_odd_binary_number);
+    DFA d6 = intersected(dfa_odd_binary_number, dfa_odd_length_binary);
+    DFA d7 = intersected(dfa_odd_length_binary, dfa_odd_binary_number);
+    DFA d8 = intersected(dfa_odd_length_binary, dfa_odd_length_binary);
+
+    DFA d9 = intersected(dfa_even_binary_number, dfa_odd_binary_number);
+    DFA d10 = intersected(dfa_even_length_binary, dfa_odd_binary_number);
+    DFA d11 = intersected(dfa_even_binary_number, dfa_odd_length_binary);
+    DFA d12 = intersected(dfa_even_length_binary, dfa_odd_length_binary);
+
+    DFA d13 = intersected(dfa_even_binary_number, dfa_odd_binary_number);
+    DFA d14 = intersected(dfa_even_length_binary, dfa_odd_binary_number);
+    DFA d15 = intersected(dfa_even_binary_number, dfa_odd_length_binary);
+    DFA d16 = intersected(dfa_even_length_binary, dfa_odd_length_binary);
+
+
+    intersect_test(d1);
+    intersect_test(d2);
+    intersect_test(d3);
+    intersect_test(d4);
+    intersect_test(d5);
+    intersect_test(d6);
+    intersect_test(d7);
+    intersect_test(d8);
+    intersect_test(d9);
+    intersect_test(d10);
+    intersect_test(d11);
+    intersect_test(d12);
+    intersect_test(d13);
+    intersect_test(d14);
+    intersect_test(d15);
+    intersect_test(d16);
+
+}
+
+void DO_TESTS4(void){
+
+    vector<DFA> DFAS = {
+        {
+            {'0', '1'},  //Alphabet
+            {'A', 'B'},  //Nodes
+            'A',         //Start
+            {'A'},       //Accepting
+            { {'B', 'A'}, {'B', 'A'} }  //Delta
+        },
+
+        {
+            {'0', '1'},  //Alphabet
+            {'A', 'B'},  //Nodes
+            'A',         //Start
+            {'B'},       //Accepting
+            { {'B', 'A'}, {'B', 'A'} }  //Delta
+        },
+
+        {
+            {'0', '1'},  //Alphabet
+            {'A', 'B'},  //Nodes
+            'A',         //Start
+            {'A'},       //Accepting
+            { {'A', 'A'}, {'B', 'B'} }  //Delta
+        },
+
+        {
+            {'0', '1'},  //Alphabet
+            {'A', 'B'},  //Nodes
+            'A',         //Start
+            {'B'},       //Accepting
+            { {'A', 'A'}, {'B', 'B'} }  //Delta
+        },
+    };
+    
+   for(int i=0;i<DFAS.size();i++){
+       for(int j=0;j<DFAS.size();j++){
+           cout << (DFAS.at(i) == DFAS.at(j)) << endl;
+       }
+   }
+
+}
+
+void DO_TESTS5(void){
+
+    DFA d1( //Third from the Last is 1
+        {'0', '1'},                                 //Alphabet
+        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'},   //Nodes
+        'A',                                        //Start
+        {'E', 'F', 'G', 'H'},                       //Accepting
+        { {'A', 'C', 'H', 'G', 'C', 'G', 'H', 'A'}, {'B', 'D', 'E', 'F', 'D', 'F', 'E', 'B'} }  //Delta
+    );
+
+    DFA d2( //Third from the Last is 0
+        {'0', '1'},                                 //Alphabet
+        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'},   //Nodes
+        'A',                                        //Start
+        {'E', 'F', 'G', 'H'},                       //Accepting
+        { {'B', 'D', 'E', 'F', 'D', 'F', 'E', 'B'}, {'A', 'C', 'H', 'G', 'C', 'G', 'H', 'A'}}  //Delta
+    );
+
+    DFA d3 = d1.inverted(); //should be d2
+    DFA d4 = d2.inverted(); //should be d1
+    
+    DFA d5 = unioned(d1, d3); //should be all strings at least 3 long
+    DFA d6 = unioned(d2, d4); //should be all strings at least 3 long
+
+    DFA d7 = intersected(d1, d3); //should be no strings
+    DFA d8 = intersected(d2, d4); //should be no strings
+
 }
 
 #endif

@@ -20,6 +20,15 @@ class Char{
         char c;
 };
 
+int get_index(vector<Char> V, Char c){
+    for(int i=0;i<V.size();i++){
+        if(V.at(i).getChar() == c.getChar()){
+            return i;
+        }
+    }
+    return -1;
+}
+
 //Easily print out the Strings
 void printListChar(vector<Char> list){
     for(int i=0;i<list.size();i++){

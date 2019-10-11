@@ -19,7 +19,14 @@ class DFA{
         //Return an accepted string
         vector<Char> find_accepted(void);
         //Returns the compliment
-        DFA invert(void);
+        DFA inverted(void);
+        //Returns the union
+        friend DFA unioned(DFA, DFA);
+        //Returns the intersect
+        friend DFA intersected(DFA, DFA);
+        void print(void);
+        friend bool operator== (DFA, DFA);
+
     private:
         vector<Char> Alpha;
         vector<Char> Nodes;
@@ -273,7 +280,7 @@ vector<Char> DFA::find_accepted(void){
     return {'e'};
 }
 
-DFA DFA::invert(void){
+DFA DFA::inverted(void){
 
     vector<Char> newAccepting;
 
@@ -292,6 +299,199 @@ DFA DFA::invert(void){
 
     return {Alpha, Nodes, Start, newAccepting, Delta};
 
+}
+
+DFA unioned(DFA d1, DFA d2){
+
+    //Alpha stays the same
+    //Nodes is now d1 * d2
+    //Start will be start of d1, start of d2
+    //Accepted will be anything that was accepted in d1 or d2
+    //Delta rows stay the same, but delta columns will be d1 + d2
+
+    for(int i=0;i<d1.Alpha.size();i++){
+        if(d1.Alpha.at(i).getChar() != d2.Alpha.at(i).getChar()){
+            cout << "Alphabet not the same" << endl;
+            exit(1);
+        }
+    }
+
+    vector<Char> NewNodes;
+
+    for(int i=0;i<d1.Nodes.size()*d2.Nodes.size();i++){
+        //New nodes will start with A because it is simple and i like it
+        NewNodes.push_back('A'+i);
+    }
+
+    //get index of each start
+    int x = get_index(d1.Nodes, d1.Start);
+    int y = get_index(d2.Nodes, d2.Start);
+
+    Char NewStart = NewNodes.at(x*y);
+
+    vector<vector <Char> > NewDelta;
+
+    for(int i=0;i<d1.Delta.size();i++){
+        NewDelta.push_back( vector<Char>{} );
+        for(int j=0;j<d1.Delta.at(i).size();j++){
+            for(int k=0;k<d2.Delta.size();k++){
+                for(int l=0;l<d2.Delta.at(k).size();l++){
+
+                    x = get_index(d1.Nodes, d1.Delta.at(i).at(j));
+                    y = get_index(d2.Nodes, d2.Delta.at(k).at(l));
+
+                    NewDelta.at(NewDelta.size()-1).push_back(NewNodes.at(y+x*d1.Delta.size()));
+                            
+                }
+            }
+        }
+    }
+
+    vector<Char> NewAccepting;
+
+    for(int i=0;i<d1.Accepting.size();i++){
+        int z = get_index(d1.Nodes, d1.Accepting.at(i));
+        for(int j=0;j<=d2.Accepting.size();j++){
+            NewAccepting.push_back(NewNodes.at(d1.Nodes.size()*z + j));
+        }
+    }
+
+    for(int i=0;i<d2.Accepting.size();i++){
+        int z = get_index(d2.Nodes, d2.Accepting.at(i));
+        for(int j=0;j<=d1.Accepting.size();j++){
+            //Check if it is already in NewAccepting
+            int contains = 0;
+            for(int k=0;k<NewAccepting.size();k++){
+                if(NewAccepting.at(k).getChar() == NewNodes.at(z+j*d1.Nodes.size()).getChar()){
+                    contains = 1;
+                }
+            }
+            if(contains == 0){
+                NewAccepting.push_back(NewNodes.at(z+j*d1.Nodes.size()));
+            }
+        }
+    }
+
+    // for(int i=0;i<NewAccepting.size();i++){
+    //     cout << NewAccepting.at(i).getChar();
+    // }
+
+    return { d1.Alpha, NewNodes, NewStart, NewAccepting, NewDelta };
+
+}
+
+DFA intersected(DFA d1, DFA d2){
+
+    //Alpha stays the same
+    //Nodes is now d1 * d2
+    //Start will be start of d1, start of d2
+    //Accepted will be anything that was accepted in d1 AND d2
+    //Delta rows stay the same, but delta columns will be d1 + d2
+
+    for(int i=0;i<d1.Alpha.size();i++){
+        if(d1.Alpha.at(i).getChar() != d2.Alpha.at(i).getChar()){
+            cout << "Alphabet not the same" << endl;
+            exit(1);
+        }
+    }
+
+    vector<Char> NewNodes;
+
+    for(int i=0;i<d1.Nodes.size()*d2.Nodes.size();i++){
+        //New nodes will start with A because it is simple and i like it
+        NewNodes.push_back('A'+i);
+    }
+
+    //get index of each start
+    int x = get_index(d1.Nodes, d1.Start);
+    int y = get_index(d2.Nodes, d2.Start);
+
+    Char NewStart = NewNodes.at(x*y);
+
+    vector<vector <Char> > NewDelta;
+
+    for(int i=0;i<d1.Delta.size();i++){
+        NewDelta.push_back( vector<Char>{} );
+        for(int j=0;j<d1.Delta.at(i).size();j++){
+            for(int k=0;k<d2.Delta.size();k++){
+                for(int l=0;l<d2.Delta.at(k).size();l++){
+
+                    x = get_index(d1.Nodes, d1.Delta.at(i).at(j));
+                    y = get_index(d2.Nodes, d2.Delta.at(k).at(l));
+
+                    NewDelta.at(NewDelta.size()-1).push_back(NewNodes.at(y+x*d1.Delta.size()));
+                            
+                }
+            }
+        }
+    }
+
+    vector<Char> NewAccepting;
+
+    for(int i=0;i<d1.Accepting.size();i++){
+        for(int j=0;j<d2.Accepting.size();j++){
+            x = get_index(d1.Nodes, d1.Accepting.at(i));
+            y = get_index(d2.Nodes, d2.Accepting.at(j));
+            
+            if(x == y){
+                NewAccepting.push_back(NewNodes.at(y+x*d1.Accepting.size()));
+            }
+        }
+    }
+
+    return { d1.Alpha, NewNodes, NewStart, NewAccepting, NewDelta };
+
+}
+
+void DFA::print(void){
+    cout << "Alpha: ";
+    printListChar(Alpha);
+    cout << "Nodes: ";
+    printListChar(Nodes);
+    cout << "Start: " << Start << endl;
+    cout << "Accepting: ";
+    printListChar(Accepting);
+    
+    cout << "Delta: " << endl;
+
+    for(int i=0;i<Delta.size();i++){
+        for(int j=0;j<Delta.at(i).size();j++){
+            cout << Delta.at(i).at(j);
+        }
+        cout << endl;
+    }
+
+}
+
+bool subset(DFA d1, DFA d2){    
+    return d2.eval(d1.find_accepted());
+}
+
+bool operator== (DFA d1, DFA d2){
+    bool equal = true;
+
+    if(d1.Alpha.size() != d2.Alpha.size()){ equal = false; }
+    if(d1.Accepting.size() != d2.Accepting.size()){ equal = false; }
+    if(d1.Nodes.size() != d2.Nodes.size()){ equal = false; }
+
+    if(d1.Start.getChar() != d2.Start.getChar()){ equal = false; }
+
+    for(int i=0;i<d1.Alpha.size();i++){
+        if(d1.Alpha.at(i).getChar() != d2.Alpha.at(i).getChar()){ equal = false; }
+    }
+    for(int i=0;i<d1.Accepting.size();i++){
+        if(d1.Accepting.at(i).getChar() != d2.Accepting.at(i).getChar()){ equal = false; }
+    }
+    for(int i=0;i<d1.Nodes.size();i++){
+        if(d1.Nodes.at(i).getChar() != d2.Nodes.at(i).getChar()){ equal = false; }
+    }
+    for(int i=0;i<d1.Delta.size();i++){
+        for(int j=0;j<d1.Delta.at(i).size();j++){
+            if(d1.Delta.at(i).at(j).getChar() != d2.Delta.at(i).at(j).getChar()){ equal = false; }
+        }
+    }
+
+    return equal;
 }
 
 
