@@ -2,8 +2,8 @@
 #include <vector>
 #include "char.h"
 #include "dfa.h"
-#include "tests.h"
 #include "nfa.h"
+#include "tests.h"
 
 using namespace std;
 

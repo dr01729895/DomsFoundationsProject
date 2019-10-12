@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "char.h"
 #include "dfa.h"
+#include "nfa.h"
 
 using namespace std;
 

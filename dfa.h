@@ -25,7 +25,13 @@ class DFA{
         //Returns the intersect
         friend DFA intersected(DFA, DFA);
         void print(void);
-        friend bool operator== (DFA, DFA);
+        friend bool operator==(DFA, DFA);
+        //convert dfa into nfa
+        vector<Char> getAlpha(void){ return Alpha; }
+        vector<Char> getNodes(void){ return Nodes; }
+        Char getStart(void){ return Start; }
+        vector<Char> getAccepting(void){ return Accepting; }
+        vector< vector<Char> > getDelta(void){ return Delta; }
 
     private:
         vector<Char> Alpha;
