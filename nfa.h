@@ -10,7 +10,10 @@ using namespace std;
 
 class NFA {
     public:
+        //Constructor
         NFA(vector<Char>, vector<Char>, Char, vector<Char>, vector< vector< vector<Char> > >);
+        //Easy print
+        void print(void);
     private:
         vector<Char> Alpha;
         vector<Char> Nodes;
@@ -47,4 +50,24 @@ NFA dfa_t_nfa(DFA d){
     return n;
 }
 
+//Prints out the nfa
+void  NFA::print(void){
+    cout << "Alpha: ";
+    printListChar(Alpha);
+    cout << "Nodes: ";
+    printListChar(Nodes);
+    cout << "Start: " << Start << endl;
+    cout << "Accepting: ";
+    printListChar(Accepting);
+    
+    cout << "Delta: " << endl;
+
+    for(int i=0;i<Delta.size();i++){
+        for(int j=0;j<Delta.at(i).size();j++){
+            printListChar(Delta.at(i).at(j));
+        }
+        cout << endl;
+    }
+
+}
 #endif

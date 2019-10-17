@@ -84,7 +84,9 @@ int main(int argc, char* argv[]){
         }
     );
 
-    cout << "Worked" << endl;
+    third_from_last_one.print();
+    third_from_last_zero.print();
+    contains_zero_one_zero.print();
 
     return 0;
 }
