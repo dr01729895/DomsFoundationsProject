@@ -84,9 +84,28 @@ int main(int argc, char* argv[]){
         }
     );
 
+    NFA contains_everything(
+        {},
+        {'A'},
+        'A',
+        {'A'},
+        { { {} } }
+    );
+
+    NFA contains_nothing(
+        {},
+        {'A'},
+        'A',
+        {},
+        { { {} } }
+    );
+
     third_from_last_one.print();
     third_from_last_zero.print();
     contains_zero_one_zero.print();
+
+    contains_everything.print();
+    contains_nothing.print();
 
     return 0;
 }
